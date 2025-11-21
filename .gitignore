@@ -1,0 +1,18 @@
+# Karabiner automatic backups
+config/karabiner/automatic_backups/
+
+# macOS
+.DS_Store
+._*
+
+# Secrets and tokens
+*secret*
+*token*
+*.pem
+*.key
+
+# Temporary files
+*.swp
+*.swo
+*~
+.netrwhist

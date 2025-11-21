@@ -1,0 +1,117 @@
+#!/bin/bash
+
+# SketchyBar Configuration with Catppuccin Mocha Theme
+# Configured for AeroSpace window manager
+
+PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
+
+# Source color scheme
+source "$HOME/.config/sketchybar/colors.sh"
+
+##### Bar Appearance #####
+sketchybar --bar position=top \
+                 height=40 \
+                 blur_radius=30 \
+                 color=$BASE \
+                 padding_left=10 \
+                 padding_right=10
+
+##### Default Item Styles #####
+default=(
+  padding_left=5
+  padding_right=5
+  icon.font="JetBrainsMono Nerd Font:Bold:14.0"
+  label.font="JetBrainsMono Nerd Font:Medium:13.0"
+  icon.color=$FG
+  label.color=$FG
+  icon.padding_left=4
+  icon.padding_right=4
+  label.padding_left=4
+  label.padding_right=4
+)
+sketchybar --default "${default[@]}"
+
+##### AeroSpace Workspace Indicators #####
+# Create event for aerospace workspace changes
+sketchybar --add event aerospace_workspace_change
+
+# Add workspace items (1-9)
+for i in {1..9}; do
+  sketchybar --add item space.$i left \
+             --set space.$i \
+                   icon="$i" \
+                   icon.padding_left=10 \
+                   icon.padding_right=10 \
+                   icon.highlight_color=$BASE \
+                   label.drawing=on \
+                   label.padding_left=0 \
+                   label.padding_right=10 \
+                   background.color=$SURFACE0 \
+                   background.corner_radius=6 \
+                   background.height=28 \
+                   background.border_width=2 \
+                   background.border_color=$SURFACE1 \
+                   background.drawing=on \
+                   script="$PLUGIN_DIR/aerospace_workspace.sh" \
+             --subscribe space.$i aerospace_workspace_change mouse.clicked
+done
+
+##### Separator #####
+sketchybar --add item separator.workspaces left \
+           --set separator.workspaces \
+                 icon="" \
+                 icon.padding_left=10 \
+                 icon.padding_right=0 \
+                 label.drawing=off \
+                 background.drawing=off \
+                 icon.color=$OVERLAY0
+
+##### System Stats (Right Side) #####
+
+# CPU Usage
+sketchybar --add item cpu right \
+           --set cpu \
+                 update_freq=2 \
+                 script="$PLUGIN_DIR/cpu.sh" \
+                 background.color=$SURFACE0 \
+                 background.corner_radius=6 \
+                 background.height=28 \
+                 background.padding_left=5 \
+                 background.padding_right=5
+
+# Memory Usage
+sketchybar --add item memory right \
+           --set memory \
+                 update_freq=5 \
+                 script="$PLUGIN_DIR/memory.sh" \
+                 background.color=$SURFACE0 \
+                 background.corner_radius=6 \
+                 background.height=28 \
+                 background.padding_left=5 \
+                 background.padding_right=5
+
+# Battery
+sketchybar --add item battery right \
+           --set battery \
+                 update_freq=10 \
+                 script="$PLUGIN_DIR/battery.sh" \
+                 background.color=$SURFACE0 \
+                 background.corner_radius=6 \
+                 background.height=28 \
+                 background.padding_left=5 \
+                 background.padding_right=5 \
+           --subscribe battery system_woke power_source_change
+
+# Clock
+sketchybar --add item clock right \
+           --set clock \
+                 update_freq=10 \
+                 script="$PLUGIN_DIR/clock.sh" \
+                 background.color=$SURFACE0 \
+                 background.corner_radius=6 \
+                 background.height=28 \
+                 background.padding_left=5 \
+                 background.padding_right=5
+
+##### Finalize Setup #####
+sketchybar --update
