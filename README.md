@@ -44,7 +44,7 @@ brew install --cask font-jetbrains-mono-nerd-font
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
+git clone https://github.com/justinsmathew/dotfiles.git ~/dotfiles
 ```
 
 2. Create symlinks to config directory:
