@@ -49,10 +49,6 @@ This is a macOS dotfiles configuration repository located at `~/.config`. It con
   - Escape when tapped
 - Contains Hyper key sublayers for custom shortcuts
 
-### Fish Shell (`fish/`)
-- Shell configuration files in `fish/conf.d/`
-- Atuin integration for shell history
-
 ## Configuration Workflow
 
 ### Editing Aerospace Configuration

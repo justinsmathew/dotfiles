@@ -9,8 +9,6 @@ My personal macOS configuration files for a tiling window manager workflow.
 - **Neovim** - LazyVim distribution
 - **WezTerm** - GPU-accelerated terminal
 - **Karabiner-Elements** - Keyboard customization (Caps Lock → Hyper/Escape)
-- **Fish** - Modern shell configuration
-- **Helix** - Modal text editor configuration
 
 ## Requirements
 
@@ -25,13 +23,11 @@ brew install --cask aerospace
 brew install sketchybar
 brew install borders  # JankyBorders
 
-# Terminal and shell
+# Terminal
 brew install --cask wezterm
-brew install fish
 
-# Editors
+# Editor
 brew install neovim
-brew install helix
 
 # Keyboard customization
 brew install --cask karabiner-elements
@@ -50,8 +46,6 @@ git clone https://github.com/justinsmathew/dotfiles.git ~/dotfiles
 2. Create symlinks to config directory:
 ```bash
 ln -s ~/dotfiles/config/aerospace ~/.config/aerospace
-ln -s ~/dotfiles/config/fish ~/.config/fish
-ln -s ~/dotfiles/config/helix ~/.config/helix
 ln -s ~/dotfiles/config/karabiner ~/.config/karabiner
 ln -s ~/dotfiles/config/nvim ~/.config/nvim
 ln -s ~/dotfiles/config/sketchybar ~/.config/sketchybar
@@ -99,8 +93,6 @@ brew services start sketchybar
 ├── .gitignore
 └── config/
     ├── aerospace/
-    ├── fish/
-    ├── helix/
     ├── karabiner/
     ├── nvim/
     ├── sketchybar/
