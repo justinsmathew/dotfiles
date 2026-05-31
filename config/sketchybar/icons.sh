@@ -15,7 +15,7 @@ export ICON_MUTE="󰖁"
 # App Icons - Map common app names to their Nerd Font icons
 get_app_icon() {
     case "$1" in
-        # Terminals
+        # Terminals (using laptop/terminal icons)
         "WezTerm"|"Wezterm"|"wezterm") echo "" ;;
         "iTerm2"|"iTerm") echo "" ;;
         "Alacritty") echo "" ;;

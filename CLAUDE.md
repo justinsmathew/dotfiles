@@ -11,7 +11,9 @@ This is a macOS dotfiles configuration repository located at `~/.config`. It con
 ### AeroSpace Window Manager (`aerospace/`)
 - **Configuration**: `aerospace/aerospace.toml`
 - Tiling window manager for macOS with i3/Sway-like keybindings
+- Window actions use **Option/Alt** (the macOS equivalent of Linux Super); app launching is on the Karabiner Hyper key, not AeroSpace
 - Uses vim-style navigation (Alt+h/j/k/l for focus, Alt+Shift+h/j/k/l for moving windows)
+- Alt+q close, Alt+f fullscreen, Alt+t toggle floating, Alt+0 = workspace 10
 - 9 workspaces with automatic app placement rules:
   - Workspace 1: WezTerm
   - Workspace 2: Zen Browser
@@ -25,8 +27,9 @@ This is a macOS dotfiles configuration repository located at `~/.config`. It con
 - **Plugins**: `sketchybar/plugins/*.sh`
 - **Colors**: `sketchybar/colors.sh` (Catppuccin Mocha theme)
 - Displays workspace indicators (1-9) that sync with AeroSpace
-- System stats: CPU, memory, battery, clock
-- Reload: `brew services restart sketchybar`
+- Center: focused app name (front_app); Right: Wi-Fi, volume, CPU, memory, battery, clock
+- The native macOS menu bar is auto-hidden (`defaults write NSGlobalDomain _HIHideMenuBar -bool true`) so SketchyBar is the only top bar
+- Reload: `sketchybar --reload` (or `brew services restart sketchybar`)
 
 ### Neovim (`nvim/`)
 - LazyVim distribution
@@ -44,10 +47,11 @@ This is a macOS dotfiles configuration repository located at `~/.config`. It con
 
 ### Karabiner-Elements (`karabiner/`)
 - **Configuration**: `karabiner/karabiner.json`
-- Caps Lock remapped to:
-  - Hyper key (Shift+Ctrl+Alt+Cmd) when held
-  - Escape when tapped
-- Contains Hyper key sublayers for custom shortcuts
+- **Caps Lock**: Escape (tap) / Left Control (hold)
+- **Right Command**: Hyper key — sets a `hyper` variable while held
+- **Hyper + key → app launch** (mirrors the Hyprland `$hyper` app layer):
+  Return=WezTerm, B=Zen, E=Finder, D=Discord, M=Spotify, O=Obsidian,
+  C=Calculator, I=Calendar, comma=Messages
 
 ## Configuration Workflow
 

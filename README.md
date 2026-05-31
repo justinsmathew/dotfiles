@@ -8,7 +8,7 @@ My personal macOS configuration files for a tiling window manager workflow.
 - **SketchyBar** - macOS status bar with Catppuccin Mocha theme
 - **Neovim** - LazyVim distribution
 - **WezTerm** - GPU-accelerated terminal
-- **Karabiner-Elements** - Keyboard customization (Caps Lock → Hyper/Escape)
+- **Karabiner-Elements** - Keyboard customization (Caps Lock → Escape/Control, Right Command → Hyper)
 
 ## Requirements
 
@@ -60,17 +60,24 @@ brew services start sketchybar
 
 ## Key Features
 
-### AeroSpace Keybindings
+### Keybindings (mirrors Linux/Hyprland)
+
+**Window actions — Option (⌥), the macOS equivalent of Linux Super (AeroSpace):**
 
 - **Focus windows**: Alt+h/j/k/l (vim-style)
 - **Move windows**: Alt+Shift+h/j/k/l
-- **Switch workspaces**: Alt+1-9
+- **Switch workspaces**: Alt+1-9 (Alt+0 = workspace 10)
 - **Move to workspace**: Alt+Shift+1-9
-- **Launch apps**:
-  - Ctrl+Shift+Enter (WezTerm)
-  - Ctrl+Shift+B (Zen Browser)
-  - Ctrl+Shift+D (Discord)
-  - Ctrl+Shift+M (Spotify)
+- **Close window**: Alt+q · **Fullscreen**: Alt+f · **Toggle floating**: Alt+t
+
+**Launch apps — Hyper (Right Command) via Karabiner:**
+
+- Hyper+Return → WezTerm
+- Hyper+B → Zen Browser · Hyper+E → Finder · Hyper+D → Discord
+- Hyper+M → Spotify · Hyper+O → Obsidian · Hyper+C → Calculator
+- Hyper+I → Calendar · Hyper+, → Messages
+
+**Launcher:** ⌘Space → Alfred
 
 ### Workspace Layout
 
@@ -82,7 +89,8 @@ brew services start sketchybar
 
 ### Karabiner
 
-- **Caps Lock**: Hyper key when held, Escape when tapped
+- **Caps Lock**: Escape (tap) / Left Control (hold)
+- **Right Command**: Hyper key (hold) — drives the app launcher above
 
 ## File Structure
 

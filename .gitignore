@@ -16,3 +16,6 @@ config/karabiner/automatic_backups/
 *.swo
 *~
 .netrwhist
+
+# Config backups
+*.bak
