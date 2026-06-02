@@ -32,14 +32,11 @@ This is a macOS dotfiles configuration repository located at `~/.config`. It con
 - Reload: `sketchybar --reload` (or `brew services restart sketchybar`)
 
 ### Neovim (`nvim/`)
-- LazyVim distribution
-- **Entry point**: `nvim/init.lua` → loads `nvim/lua/config/lazy.lua`
-- **Configuration structure**:
-  - `nvim/lua/config/` - Core config (options, keymaps, autocmds)
-  - `nvim/lua/plugins/` - Custom plugin specs (currently contains example.lua which is disabled)
-- Plugin management via lazy.nvim
-- Custom plugins auto-loaded from `nvim/lua/plugins/`
-- Refer to LazyVim documentation for defaults
+- Minimal single-file config using Neovim 0.12's native `vim.pack.add()` package manager (no lazy.nvim, no LazyVim)
+- **Entry point**: `nvim/init.lua` — all config lives in this one file
+- **Plugins**: fzf-lua (fuzzy finder), tokyonight.nvim (colorscheme), which-key.nvim, nvim-treesitter, gitsigns.nvim, mason.nvim, mini.surround, mini.pairs
+- **LSP**: native `vim.lsp` API (no lspconfig); lua_ls and zls pre-configured; install servers via `:MasonInstall <name>`
+- **Leader**: Space; key groups: `<leader>f` find, `<leader>g` git, `<leader>l` lsp, `<leader>x` diagnostics, `<leader>s` splits, `<leader>b` buffers
 
 ### WezTerm (`wezterm/`)
 - **Configuration**: `wezterm/wezterm.lua`
@@ -64,8 +61,8 @@ This is a macOS dotfiles configuration repository located at `~/.config`. It con
 2. Reload: `brew services restart sketchybar`
 
 ### Editing Neovim Configuration
-1. Edit files in `~/.config/nvim/lua/config/` or `~/.config/nvim/lua/plugins/`
-2. Changes auto-reload or restart Neovim
+1. Edit `~/.config/nvim/init.lua`
+2. Restart Neovim (changes don't hot-reload)
 
 ### Editing Karabiner
 1. Edit `~/.config/karabiner/karabiner.json`
