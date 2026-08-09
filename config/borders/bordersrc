@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# JankyBorders — focused window gets a light tokyonight cyan ring,
+# unfocused windows a dimmed grey-blue one.
+options=(
+  style=round
+  width=7.0
+  hidpi=on
+  active_color=0xff7dcfff
+  inactive_color=0xff565f89
+)
+
+borders "${options[@]}"

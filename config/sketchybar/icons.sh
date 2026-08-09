@@ -16,6 +16,7 @@ export ICON_MUTE="󰖁"
 get_app_icon() {
     case "$1" in
         # Terminals (using laptop/terminal icons)
+        "Ghostty"|"ghostty") echo "" ;;
         "WezTerm"|"Wezterm"|"wezterm") echo "" ;;
         "iTerm2"|"iTerm") echo "" ;;
         "Alacritty") echo "" ;;
@@ -26,6 +27,7 @@ get_app_icon() {
         "Safari"|"Safari Technology Preview") echo "󰀹" ;;
         "Google Chrome"|"Chrome") echo "" ;;
         "Firefox"|"Firefox Developer Edition") echo "" ;;
+        "Zen"|"Zen Browser") echo "" ;;
         "Arc") echo "󰞍" ;;
         "Brave Browser"|"Brave") echo "󰖟" ;;
         "Microsoft Edge"|"Edge") echo "󰇩" ;;

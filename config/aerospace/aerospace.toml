@@ -1,39 +1,38 @@
 # AeroSpace Configuration
 # https://github.com/nikitabobko/AeroSpace
 
+config-version = 2
+
+# Core workspaces always exist even when empty; 6-9 are created on demand.
+persistent-workspaces = ['1', '2', '3', '4', '5']
+
 # Start AeroSpace at login
 start-at-login = true
 
-# Start JankyBorders on startup
-# Focus external monitor to workspace 1 on startup
-after-startup-command = [
-  'exec-and-forget borders active_color=0xffDC143C inactive_color=0xff494d64 width=5.0',
-  'exec-and-forget sleep 1 && aerospace workspace 1',
-]
+# Start JankyBorders on startup (reads ~/.config/borders/bordersrc)
+after-startup-command = ['exec-and-forget borders']
 
 # Notify sketchybar on workspace change
 exec-on-workspace-change = [
   '/bin/bash',
   '-c',
-  'sketchybar --trigger aerospace_workspace_change',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
 ]
 
 # Normalizations
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
-# Mouse follows focus
-on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-on-focus-changed = ['move-mouse window-lazy-center']
-
-# Gaps between windows
+# Gaps between windows. sketchybar (32px) lives inside the strip macOS
+# already reserves at the top of the built-in display, so outer.top only
+# needs a sliver of clearance for the window border.
 [gaps]
 inner.horizontal = 8
 inner.vertical = 8
-outer.bottom = [{ monitor."built-in" = 5 }, { monitor."main" = 8 }, 8]
-outer.top = [{ monitor."built-in" = 10 }, { monitor."main" = 48 }, 48]
-outer.left = [{ monitor."built-in" = 5 }, { monitor."main" = 8 }, 8]
-outer.right = [{ monitor."built-in" = 5 }, { monitor."main" = 8 }, 8]
+outer.top = 2
+outer.bottom = 8
+outer.left = 8
+outer.right = 8
 
 # Main mode bindings
 [mode.main.binding]
@@ -41,14 +40,13 @@ outer.right = [{ monitor."built-in" = 5 }, { monitor."main" = 8 }, 8]
 # ============================================
 # APPLICATION LAUNCHING
 # ============================================
-# Apps launch from the Hyper key (Right Command) via Karabiner, mirroring
-# the Hyprland $hyper app layer:
-#   Hyper+Return=WezTerm  Hyper+B=Zen  Hyper+E=Finder  Hyper+D=Discord
+# Apps launch from the Hyper key (Right Command) via Karabiner:
+#   Hyper+Return=Ghostty  Hyper+B=Helium  Hyper+E=Finder  Hyper+D=Discord
 #   Hyper+M=Spotify  Hyper+O=Obsidian  Hyper+C=Calculator
 # Config: ~/.config/karabiner/karabiner.json
 
 # ============================================
-# WORKSPACE NAVIGATION (1-9 only)
+# WORKSPACE NAVIGATION
 # ============================================
 alt-1 = 'workspace 1'
 alt-2 = 'workspace 2'
@@ -59,7 +57,6 @@ alt-6 = 'workspace 6'
 alt-7 = 'workspace 7'
 alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
-alt-0 = 'focus-monitor 1' # Go to external monitor (M27Q)
 
 # ============================================
 # MOVE WINDOWS TO WORKSPACES (and follow)
@@ -73,7 +70,6 @@ alt-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
 alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
 alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
-alt-shift-0 = 'move-node-to-monitor 1' # Send window to external monitor (M27Q)
 
 # ============================================
 # WINDOW FOCUS (vim-style navigation)
@@ -86,9 +82,6 @@ alt-l = 'focus right'
 # Cycle through windows in current workspace (like Alt+Tab)
 alt-tab = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
 
-# Switch focus between monitors (easy back and forth)
-alt-shift-tab = 'focus-monitor --wrap-around next'
-
 # ============================================
 # MOVE WINDOWS (vim-style navigation)
 # ============================================
@@ -97,22 +90,13 @@ alt-shift-j = 'move down'
 alt-shift-k = 'move up'
 alt-shift-l = 'move right'
 
-# Move window to monitors
-alt-shift-f = 'move-node-to-monitor 1' # Move to external monitor (M27Q)
-alt-shift-a = 'move-node-to-monitor 2' # Move to built-in display
-
 # ============================================
 # LAYOUT CONTROLS
 # ============================================
 alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
 alt-f = 'fullscreen'
-
-# Toggle between floating and tiling (mirror Hyprland SUPER+T)
 alt-t = 'layout floating tiling'
-alt-shift-space = 'layout floating tiling'
-
-# Close focused window (mirror Hyprland SUPER+Q)
 alt-q = 'close'
 
 # ============================================
@@ -143,28 +127,60 @@ backspace = ['close-all-windows-but-current', 'mode main']
 # ============================================
 # WINDOW RULES - Auto-assign apps to workspaces
 # ============================================
+# on-window-detected fires only when a window is created, so windows can
+# still be moved to any workspace afterwards with alt-shift-N.
 
-# Automatically move WezTerm to workspace 1
+# Workspace 1: terminal
 [[on-window-detected]]
-if.app-id = 'com.github.wez.wezterm'
+if.app-id = 'com.mitchellh.ghostty'
 run = 'move-node-to-workspace 1'
 
-# Automatically move Zen Browser to workspace 2
+# Workspace 2: browsers
+[[on-window-detected]]
+if.app-id = 'net.imput.helium'
+run = 'move-node-to-workspace 2'
+
 [[on-window-detected]]
 if.app-id = 'app.zen-browser.zen'
 run = 'move-node-to-workspace 2'
 
-# Automatically move Discord to workspace 3
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
+if.app-id = 'org.mozilla.firefox'
+run = 'move-node-to-workspace 2'
+
+# Workspace 3: Discord
 [[on-window-detected]]
 if.app-id = 'com.hnc.Discord'
 run = 'move-node-to-workspace 3'
 
-# Automatically move Spotify to workspace 5
+# Workspace 4: Obsidian
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = 'move-node-to-workspace 4'
+
+# Workspace 5: music
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = 'move-node-to-workspace 5'
 
-# Automatically move Desktop Claude to workspace 6
+[[on-window-detected]]
+if.app-id = 'com.apple.Music'
+run = 'move-node-to-workspace 5'
+
+# Workspace 6: Claude Desktop
 [[on-window-detected]]
 if.app-id = 'com.anthropic.claudefordesktop'
 run = 'move-node-to-workspace 6'
+
+# Float small utility windows instead of tiling them
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = 'layout floating'

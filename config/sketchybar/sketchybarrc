@@ -1,27 +1,26 @@
 #!/bin/bash
 
-# SketchyBar Configuration with Catppuccin Mocha Theme
-# Configured for AeroSpace window manager
+# SketchyBar — Tokyonight Night, minimal
+# Full-width top bar replacing the macOS menu bar; workspaces synced with AeroSpace.
 
 PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
-
-# Source color scheme
 source "$HOME/.config/sketchybar/colors.sh"
 
 ##### Bar Appearance #####
+# height=32 fills the strip macOS reserves for the menu bar / notch exactly,
+# so tiled windows can start immediately below the bar.
 sketchybar --bar position=top \
-                 display=all \
-                 height=40 \
+                 height=32 \
                  blur_radius=30 \
-                 color=$BASE \
-                 padding_left=10 \
-                 padding_right=10
+                 color=$BG \
+                 padding_left=8 \
+                 padding_right=8
 
 ##### Default Item Styles #####
 default=(
-  padding_left=5
-  padding_right=5
-  icon.font="JetBrainsMono Nerd Font:Bold:14.0"
+  padding_left=4
+  padding_right=4
+  icon.font="JetBrainsMono Nerd Font:Bold:13.0"
   label.font="JetBrainsMono Nerd Font:Medium:13.0"
   icon.color=$FG
   label.color=$FG
@@ -32,119 +31,81 @@ default=(
 )
 sketchybar --default "${default[@]}"
 
-##### AeroSpace Workspace Indicators #####
-# Create event for aerospace workspace changes
+##### AeroSpace Workspaces (left) #####
+# Numbers only; only occupied workspaces + the focused one are visible.
 sketchybar --add event aerospace_workspace_change
 
-# Add workspace items (1-9)
 for i in {1..9}; do
   sketchybar --add item space.$i left \
              --set space.$i \
+                   drawing=off \
                    icon="$i" \
-                   icon.padding_left=10 \
-                   icon.padding_right=10 \
-                   icon.highlight_color=$BASE \
-                   label.drawing=on \
-                   label.padding_left=0 \
-                   label.padding_right=10 \
-                   background.color=$SURFACE0 \
+                   icon.padding_left=8 \
+                   icon.padding_right=8 \
+                   label.drawing=off \
+                   padding_left=2 \
+                   padding_right=2 \
                    background.corner_radius=6 \
-                   background.height=28 \
-                   background.border_width=2 \
-                   background.border_color=$SURFACE1 \
-                   background.drawing=on \
-                   script="$PLUGIN_DIR/aerospace_workspace.sh" \
-             --subscribe space.$i aerospace_workspace_change mouse.clicked
+                   background.height=22 \
+                   background.drawing=off \
+                   click_script="aerospace workspace $i"
 done
 
-##### Separator #####
+# Single updater drives all 9 items in one batch per event.
+sketchybar --add item space_updater left \
+           --set space_updater \
+                 drawing=off \
+                 update_freq=15 \
+                 script="$PLUGIN_DIR/workspaces.sh" \
+           --subscribe space_updater aerospace_workspace_change front_app_switched system_woke
+
+##### Separator + Front App (left) #####
 sketchybar --add item separator.workspaces left \
            --set separator.workspaces \
-                 icon="" \
-                 icon.padding_left=10 \
-                 icon.padding_right=0 \
+                 icon="│" \
+                 icon.color=$COMMENT \
                  label.drawing=off \
-                 background.drawing=off \
-                 icon.color=$OVERLAY0
+                 background.drawing=off
 
-##### Focused App (center) - mirrors waybar hyprland/window #####
-sketchybar --add item front_app center \
+sketchybar --add item front_app left \
            --set front_app \
-                 icon="" \
-                 icon.color=$MAUVE \
-                 label.padding_left=4 \
+                 icon.color=$BLUE \
+                 label.color=$FG \
                  script="$PLUGIN_DIR/front_app.sh" \
            --subscribe front_app front_app_switched
 
-##### System Stats (Right Side) #####
-
-# CPU Usage
-sketchybar --add item cpu right \
-           --set cpu \
-                 update_freq=2 \
-                 script="$PLUGIN_DIR/cpu.sh" \
-                 background.color=$SURFACE0 \
-                 background.corner_radius=6 \
-                 background.height=28 \
-                 background.padding_left=5 \
-                 background.padding_right=5
-
-# Memory Usage
-sketchybar --add item memory right \
-           --set memory \
-                 update_freq=5 \
-                 script="$PLUGIN_DIR/memory.sh" \
-                 background.color=$SURFACE0 \
-                 background.corner_radius=6 \
-                 background.height=28 \
-                 background.padding_left=5 \
-                 background.padding_right=5
-
-# Battery
-sketchybar --add item battery right \
-           --set battery \
-                 update_freq=10 \
-                 script="$PLUGIN_DIR/battery.sh" \
-                 background.color=$SURFACE0 \
-                 background.corner_radius=6 \
-                 background.height=28 \
-                 background.padding_left=5 \
-                 background.padding_right=5 \
-           --subscribe battery system_woke power_source_change
-
-# Volume (mirrors waybar pulseaudio)
-sketchybar --add item volume right \
-           --set volume \
-                 script="$PLUGIN_DIR/volume.sh" \
-                 background.color=$SURFACE0 \
-                 background.corner_radius=6 \
-                 background.height=28 \
-                 background.padding_left=5 \
-                 background.padding_right=5 \
-           --subscribe volume volume_change
-
-# Wi-Fi / Network (mirrors waybar network)
-sketchybar --add item wifi right \
-           --set wifi \
-                 update_freq=5 \
-                 script="$PLUGIN_DIR/wifi.sh" \
-                 background.color=$SURFACE0 \
-                 background.corner_radius=6 \
-                 background.height=28 \
-                 background.padding_left=5 \
-                 background.padding_right=5 \
-           --subscribe wifi system_woke
+##### Right Side (added right-to-left) #####
 
 # Clock
 sketchybar --add item clock right \
            --set clock \
                  update_freq=10 \
-                 script="$PLUGIN_DIR/clock.sh" \
-                 background.color=$SURFACE0 \
-                 background.corner_radius=6 \
-                 background.height=28 \
-                 background.padding_left=5 \
-                 background.padding_right=5
+                 script="$PLUGIN_DIR/clock.sh"
+
+# Battery
+sketchybar --add item battery right \
+           --set battery \
+                 update_freq=60 \
+                 script="$PLUGIN_DIR/battery.sh" \
+           --subscribe battery system_woke power_source_change
+
+# Volume
+sketchybar --add item volume right \
+           --set volume \
+                 icon.color=$BLUE \
+                 script="$PLUGIN_DIR/volume.sh" \
+           --subscribe volume volume_change
+
+# Now Playing (Spotify / Apple Music)
+sketchybar --add item media right \
+           --set media \
+                 drawing=off \
+                 update_freq=5 \
+                 icon="󰝚" \
+                 icon.color=$MAGENTA \
+                 label.color=$MAGENTA \
+                 label.max_chars=35 \
+                 script="$PLUGIN_DIR/media.sh"
 
 ##### Finalize Setup #####
 sketchybar --update
